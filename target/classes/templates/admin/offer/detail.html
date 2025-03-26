@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/admin/head :: head">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div th:insert="fragments/admin/header :: header"></div>
+    <div th:insert="fragments/admin/sidebar :: aside"></div>
+
+    <main id="main" class="main">
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header"><h3>Offres Gagnées</h3></div>
+                    <div class="card-body">
+                        <h1 th:text="${#arrays.length(offers['won'])}">0</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header"><h3>Offres Perdues</h3></div>
+                    <div class="card-body">
+                        <h1 th:text="${#arrays.length(offers['lost'])}">0</h1>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-3">
+                    <div class="card-header"><h3>Offres en Cours</h3></div>
+                    <div class="card-body">
+                        <h1 th:text="${#arrays.length(offers['inProgress'])}">0</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tableau des Offres -->
+        <div class="card mt-5">
+            <div class="card-header">
+                <h3>Liste des Offres</h3>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Client</th>
+                            <th>Date d'Envoi</th>
+                            <th>Source</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Boucle pour afficher les offres -->
+                        <th:block th:each="offerList : ${offers}">
+                            <tr:block th:each="offer : ${offerList.value}">
+                                <td th:text="${offer.id}"></td>
+                                <td th:text="${offer.client.company_name}"></td>
+                                <td th:text="${#temporals.format(offer.sent_at, 'dd/MM/yyyy HH:mm')}"></td>
+                                <td th:text="${offer.source_type}"></td>
+                                <td>
+                                    <span class="badge bg-success" th:if="${offer.status == 'won'}">Gagnée</span>
+                                    <span class="badge bg-danger" th:if="${offer.status == 'lost'}">Perdue</span>
+                                    <span class="badge bg-warning text-dark" th:if="${offer.status == 'in-progress'}">En Cours</span>
+                                </td>
+                            </tr>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <div th:insert="fragments/admin/footer :: footer"></div>
+</body>
+</html>

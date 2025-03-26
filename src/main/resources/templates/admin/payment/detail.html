@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/admin/head :: head">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+<body>
+    <div th:insert="fragments/admin/header :: header"></div>
+    <div th:insert="fragments/admin/sidebar :: aside"></div>
+
+    <main id="main" class="main">
+
+        <!-- Tableau des Payments -->
+        <div class="card mt-5">
+            <div class="card-header">
+                <h3>Liste des Payments</h3>
+            </div>
+
+            <p th:if="${message}" th:text="${message}" class="bg-info"></p>
+
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Description</th>
+                            <th>Payment source</th>
+                            <th>Date payment</th>
+                            <th>Invoice ID</th>
+                            <th>Montant</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Boucle pour afficher les payments -->
+                        <tr th:each="payment : ${payments}">
+                            <td th:text="${payment.id}"></td>
+                            <td th:text="${payment.description}"></td>
+                            <td th:text="${payment.payment_source}"></td>
+                            <td th:text="${#temporals.format(payment.payment_date, 'dd/MM/yyyy')}"></td>
+                            <td th:text="${payment.invoice_id}"></td>
+                            <td th:text="${payment.amount}"></td>
+                            <td>
+                                <button class="btn btn-primary btn-sm edit-btn"
+                                        th:data-external-id="${payment.external_id}"
+                                        th:data-amount="${payment.amount}">
+                                    Modifier
+                                </button>
+
+                                <form th:action="@{/payments/delete}" method="get" style="display:inline;">
+                                    <input type="hidden" name="externalId" th:value="${payment.external_id}" />
+                                    <button type="submit" class="btn btn-danger btn-sm">Annuler</button>
+                                </form>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Modal (généré dynamiquement en JS) -->
+    <div id="modal-container"></div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll(".edit-btn").forEach(button => {
+                button.addEventListener("click", function () {
+                    let externalId = this.getAttribute("data-external-id");
+                    let amount = this.getAttribute("data-amount");
+
+                    let oldModal = document.getElementById("editPaymentModal");
+                    if (oldModal) {
+                        oldModal.remove();
+                    }
+
+                    let modalHtml = `
+                        <div class="modal fade" id="editPaymentModal" tabindex="-1" aria-labelledby="editPaymentModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editPaymentModalLabel">Modifier le paiement</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <form action="/payments/update" method="post">
+                                        <div class="modal-body">
+                                            <input type="hidden" name="externalId" value="${externalId}" />
+                                            <div class="mb-3">
+                                                <label for="modal-amount" class="form-label">Nouveau montant</label>
+                                                <input type="number" name="amount" class="form-control" value="${amount}" required />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="submit" class="btn btn-success">Enregistrer</button>
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+
+                    document.getElementById("modal-container").innerHTML = modalHtml;
+
+                    let modal = new bootstrap.Modal(document.getElementById("editPaymentModal"));
+                    modal.show();
+                });
+            });
+        });
+    </script>
+
+    <div th:insert="fragments/admin/footer :: footer"></div>
+</body>
+</html>

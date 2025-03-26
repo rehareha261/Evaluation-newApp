@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/admin/head :: head">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div th:insert="fragments/admin/header :: header"></div>
+    <div th:insert="fragments/admin/sidebar :: aside"></div>
+
+    <main id="main" class="main">
+
+        <!-- Tableau des Factures -->
+        <div class="card mt-5">
+            <div class="card-header">
+                <h3>Liste des Factures</h3>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Numéro de Facture</th>
+                            <th>Date d'Envoi</th>
+                            <th>Status</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Boucle pour afficher les factures -->
+                        <tr:block th:each="invoiceTotal : ${invoices}">
+                            <td th:text="${invoiceTotal.invoice.id}"></td>
+                            <td th:text="${invoiceTotal.invoice.invoice_number}"></td>
+                            <td th:text="${#temporals.format(invoiceTotal.invoice.sent_at, 'dd/MM/yyyy HH:mm')}"></td>
+                            <td th:text="${invoiceTotal.invoice.status}"></td>
+                            <td th:text="${invoiceTotal.total}"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </main>
+    <div th:insert="fragments/admin/footer :: footer"></div>
+</body>
+</html>
