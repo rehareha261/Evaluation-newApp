@@ -8,11 +8,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.itu.evaluation.Util.CurrencyFormatter;
+import com.itu.evaluation.constante.Constante;
 import com.itu.evaluation.service.DashboardService;
 import com.itu.evaluation.service.InvoiceService;
 import com.itu.evaluation.service.OfferService;
 import com.itu.evaluation.service.PaymentService;
+
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -22,12 +28,27 @@ public class AdminController {
     private final OfferService offerService;
     private final PaymentService paymentService;
     private final DashboardService dashboardService;
+    private final HttpSession session;
 
-    public AdminController(InvoiceService invoiceService, OfferService offerService, PaymentService paymentService, DashboardService dashboardService) {
+    public AdminController(InvoiceService invoiceService, OfferService offerService, PaymentService paymentService, DashboardService dashboardService, HttpSession session) {
         this.invoiceService = invoiceService;
         this.offerService = offerService;
         this.dashboardService = dashboardService;
         this.paymentService = paymentService;
+        this.session = session;
+    }
+
+    @GetMapping("/paiement-facture")
+    @ResponseBody
+    public Map<String, Object> paiementFacture(@RequestParam Integer year)throws Exception{
+        Map<String, Object> data = this.dashboardService.getMensuelle(year);
+        return data;
+    }
+
+    @GetMapping("/logout")
+    public String logout(){
+        this.session.invalidate();
+        return "redirect:/login";
     }
 
     @GetMapping("/dashboard")
@@ -37,15 +58,17 @@ public class AdminController {
             Integer offerCount = offerService.getCountOffers();
             Double invoiceTotal = invoiceService.getTotalInvoices();
             Double paymentTotal = paymentService.getTotalPayments();
-            Map<String, Object> dataBar = this.dashboardService.getMensuelle();
+            Map<String, Object> dataBar = this.dashboardService.getMensuelle(null);
             Map<String, Object> dataPie = this.dashboardService.getRepartitionPayment();
             Map<String, Object> dataLine = this.dashboardService.getEvolution();
             
+            String invoiceTotalFormatted = CurrencyFormatter.formatCurrency(invoiceTotal, Constante.localite);
+            String paymentTottalFormatted = CurrencyFormatter.formatCurrency(paymentTotal, Constante.localite);
 
             model.addAttribute("invoiceCount", invoiceCount);
             model.addAttribute("offerCount", offerCount);
-            model.addAttribute("invoiceTotal", invoiceTotal);
-            model.addAttribute("paymentTotal", paymentTotal);
+            model.addAttribute("invoiceTotal", invoiceTotalFormatted);
+            model.addAttribute("paymentTotal", paymentTottalFormatted);
             model.addAttribute("labels", (List<Object>)dataBar.get("labels"));
             model.addAttribute("factureData", (List<Object>)dataBar.get("factureData"));
             model.addAttribute("payeeData", (List<Object>)dataBar.get("payeeData"));

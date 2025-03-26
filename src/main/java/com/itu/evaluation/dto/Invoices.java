@@ -22,7 +22,7 @@ public class Invoices {
     private LocalDateTime sent_at;
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'")
     private LocalDateTime due_at;
-    private Integer integration_invoice_id;
+    private String integration_invoice_id;
     private String integration_type;
     private String source_type;
     private Integer source_id;

@@ -1,5 +1,6 @@
 package com.itu.evaluation.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -37,8 +38,11 @@ public class DashboardService {
         this.session = session;
     }
 
-    public Map<String, Object> getMensuelle()throws Exception{
-        String url = ApiUrl.DASHBOARD_API_URL_MENSUELLE;
+    public Map<String, Object> getMensuelle(Integer annee)throws Exception{
+        if(annee == null){
+            annee = LocalDateTime.now().getYear();
+        }
+        String url = ApiUrl.DASHBOARD_API_URL_MENSUELLE+"?year="+annee;
 
         ResponseEntity<ApiResponse<List<Map<String,MoisData>>>> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(this.headerGen.generateHeader(this.session)), new ParameterizedTypeReference<ApiResponse<List<Map<String,MoisData>>>>() {});
 

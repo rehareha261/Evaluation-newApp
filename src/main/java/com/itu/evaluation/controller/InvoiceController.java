@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpClientErrorException;
 
+import com.itu.evaluation.Util.ObjectMapperExtension;
 import com.itu.evaluation.dto.Invoices;
 import com.itu.evaluation.dto.InvoicesTotal;
-import com.itu.evaluation.dto.Offer;
 import com.itu.evaluation.service.InvoiceService;
 
 @Controller
@@ -49,8 +50,18 @@ public class InvoiceController {
 
     @PostMapping("/remise")
     public String setRemise(@RequestParam Double remise, Model model)throws Exception{
-        String message = this.invoiceService.setRemise(remise);
-        model.addAttribute("message", message);
+        try{
+            String message = this.invoiceService.setRemise(remise);
+            model.addAttribute("message", message);
+        }
+        catch(Exception e){
+            HttpClientErrorException exception = (HttpClientErrorException)(e);
+            String message = exception.getResponseBodyAsString();
+            message = ObjectMapperExtension.extractErrorMessage(message);
+            model.addAttribute("message", message);
+            System.out.println(message);
+            model.addAttribute("message", message);
+        }
         return "admin/conf/remise";
     }
 

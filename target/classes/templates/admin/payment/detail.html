@@ -10,14 +10,23 @@
     <div th:insert="fragments/admin/sidebar :: aside"></div>
 
     <main id="main" class="main">
-
+        <!-- <div class="pagetitle">
+            <h1>Back-office</h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                    <li class="breadcrumb-item">dashboard</li>
+                    <li class="breadcrumb-item active">Payments</li>
+                </ol>
+            </nav>
+        </div> -->
         <!-- Tableau des Payments -->
         <div class="card mt-5">
             <div class="card-header">
                 <h3>Liste des Payments</h3>
+                <p style="color: grey;" th:if="${message}" th:text="${message}"></p>
             </div>
 
-            <p th:if="${message}" th:text="${message}" class="bg-info"></p>
 
             <div class="card-body">
                 <table class="table table-striped">

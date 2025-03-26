@@ -1,4 +1,14 @@
+/**
+* Template Name: NiceAdmin
+* Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+* Updated: Apr 20 2024 with Bootstrap v5.3.3
+* Author: BootstrapMade.com
+* License: https://bootstrapmade.com/license/
+*/
 
+/*--------------------------------------------------------------
+# General
+--------------------------------------------------------------*/
 :root {
   scroll-behavior: smooth;
 }
@@ -816,12 +826,12 @@ h6 {
 }
 
 .dashboard .revenue-card .card-icon {
-  color: #696f90;
+  color: #2eca6a;
   background: #e0f8e9;
 }
 
 .dashboard .customers-card .card-icon {
-  color: #696f90;
+  color: #ff771d;
   background: #ffecdf;
 }
 
@@ -896,7 +906,7 @@ h6 {
 }
 
 .dashboard .news h4 a:hover {
-  color: #696f90;
+  color: #4154f1;
 }
 
 .dashboard .news p {
@@ -1203,95 +1213,21 @@ h6 {
 /*--------------------------------------------------------------
 # Footer
 --------------------------------------------------------------*/
-/* ======= Footer ======= */
 .footer {
-  background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
-  color: #fff;
-  padding: 30px 0;
+  padding: 20px 0;
   font-size: 14px;
-  position: relative;
-  box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s;
+  border-top: 1px solid #cddfff;
 }
 
 .footer .copyright {
   text-align: center;
-  padding-bottom: 15px;
-}
-
-.footer .copyright span {
-  color: #3fbbc0;
-  font-weight: 700;
+  color: #012970;
 }
 
 .footer .credits {
+  padding-top: 5px;
   text-align: center;
-  padding-bottom: 15px;
-}
-
-.footer .credits a {
-  color: #3fbbc0;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-.footer .credits a:hover {
-  color: #65e6ec;
-  text-decoration: underline;
-}
-
-.back-to-top {
-  position: fixed;
-  right: 30px;
-  bottom: 30px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #3fbbc0;
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  transition: all 0.3s ease;
-  opacity: 0;
-  visibility: hidden;
-  z-index: 999;
-  box-shadow: 0 2px 15px rgba(63, 187, 192, 0.3);
-}
-
-.back-to-top.active {
-  opacity: 1;
-  visibility: visible;
-}
-
-.back-to-top:hover {
-  background: #65e6ec;
-  color: #fff;
-  transform: translateY(-3px);
-}
-
-/* Animation pour le bouton back-to-top */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-.back-to-top i {
-  animation: fadeIn 0.5s ease;
-}
-
-/* Responsive */
-@media (max-width: 768px) {
-  .footer {
-    text-align: center;
-    padding: 20px 0;
-  }
-  
-  .back-to-top {
-    width: 40px;
-    height: 40px;
-    font-size: 20px;
-    right: 15px;
-    bottom: 15px;
-  }
+  font-size: 13px;
+  color: #012970;
 }
